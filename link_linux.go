@@ -2498,6 +2498,8 @@ func parseGeneveData(link Link, data []syscall.NetlinkRouteAttr) {
 		switch datum.Attr.Type {
 		case nl.IFLA_GENEVE_ID:
 			geneve.ID = ntohl(datum.Value[0:4])
+		case nl.IFLA_GENEVE_REMOTE, nl.IFLA_GENEVE_REMOTE6:
+			geneve.Remote = datum.Value
 		case nl.IFLA_GENEVE_PORT:
 			geneve.Dport = ntohs(datum.Value[0:2])
 		case nl.IFLA_GENEVE_TTL:
