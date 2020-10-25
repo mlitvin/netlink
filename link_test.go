@@ -633,12 +633,10 @@ func TestGeneveCompareToIP(t *testing.T) {
 	ns, tearDown := setUpNamedNetlinkTest(t)
 	defer tearDown()
 
-	t.Log(ns)
-
 	expected := &Geneve{
 		ID:     0x764332, // 23 bits
 		Remote: net.ParseIP("1.2.3.4"),
-		Dport:  0x1234,
+		Dport:  6081,
 	}
 
 	// Create interface
@@ -647,7 +645,9 @@ func TestGeneveCompareToIP(t *testing.T) {
 		"type", "geneve",
 		"vni", fmt.Sprint(expected.ID),
 		"remote", expected.Remote.String(),
-		"dstport", fmt.Sprint(expected.Dport),
+		// TODO: unit tests are currently done on ubuntu 16, and the version of iproute2 there doesn't support dstport
+		// We can still do most of the testing by verifying that we do read the default port
+		// "dstport", fmt.Sprint(expected.Dport),
 	)
 	out := &bytes.Buffer{}
 	cmd.Stdout = out
